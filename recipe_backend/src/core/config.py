@@ -36,19 +36,31 @@ class Settings(BaseSettings):
         description="List of allowed CORS origins.",
     )
 
-    # Auth (scaffolding; actual auth implementation will evolve)
-    auth_jwt_secret: str = Field(
-        default="dev-only-secret",
-        description=(
-            "JWT secret for signing tokens. Must be overridden in production. "
-            "For now, used only as scaffolding."
-        ),
-        alias="AUTH_JWT_SECRET",
+    # Auth / JWT
+    jwt_secret_key: str = Field(
+        ...,
+        description="Secret key for signing ACCESS tokens (JWT).",
+        alias="JWT_SECRET_KEY",
     )
-    auth_jwt_algorithm: str = Field(
+    jwt_refresh_secret_key: str = Field(
+        ...,
+        description="Secret key for signing REFRESH tokens (JWT).",
+        alias="JWT_REFRESH_SECRET_KEY",
+    )
+    algorithm: str = Field(
         default="HS256",
-        description="JWT algorithm identifier.",
-        alias="AUTH_JWT_ALGORITHM",
+        description="JWT signing algorithm (e.g., HS256).",
+        alias="ALGORITHM",
+    )
+    access_token_expire_minutes: int = Field(
+        default=30,
+        description="Access token expiration in minutes.",
+        alias="ACCESS_TOKEN_EXPIRE_MINUTES",
+    )
+    refresh_token_expire_minutes: int = Field(
+        default=60 * 24 * 7,
+        description="Refresh token expiration in minutes.",
+        alias="REFRESH_TOKEN_EXPIRE_MINUTES",
     )
 
 

@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.auth import router as auth_router
 from src.core.config import get_settings
 from src.core.db import get_db_session
 
@@ -19,6 +20,7 @@ def create_app() -> FastAPI:
     settings = get_settings()
 
     openapi_tags = [
+        {"name": "auth", "description": "Authentication endpoints (register, login, refresh, me)."},
         {"name": "health", "description": "Service and dependency health checks."},
     ]
 
@@ -39,6 +41,8 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    app.include_router(auth_router)
 
     @app.get(
         "/health",
